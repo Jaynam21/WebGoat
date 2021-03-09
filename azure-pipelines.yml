@@ -1,21 +1,22 @@
-# Ant
-# Build your Java projects and run tests with Apache Ant.
-# Add steps that save build artifacts and more:
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
- 
+
 trigger:
-- master
- 
+- {{ branch }}
+
 pool:
-  vmImage: 'ubuntu-latest'
- 
+  {{ pool }}
+
 steps:
-- task: Ant@1
+- task: Maven@3
   inputs:
-    workingDirectory: ''
-    buildFile: 'build.xml'
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
